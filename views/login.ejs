@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <link rel="icon" href="/img/Logo.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Página de inicio de sesión">
   <link rel="stylesheet" href="dist/output.css">
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -53,47 +54,106 @@
         border-radius: 100%;
         transform: translate(-50%, -250%) scale(0);
     }
-}
+	}
 
-.logo-container {
-	display: none; /* oculto al inicio */
-    background-image: url('img/Logo.png'); 
-    background-size: cover; /* Cambiado a cover */
-    background-position: center;
-    background-repeat: no-repeat;
+	.logo-container {
+		display: none; /* oculto al inicio */
+		background-image: url('img/Logo.png'); 
+		background-size: cover; /* Cambiado a cover */
+		background-position: center;
+		background-repeat: no-repeat;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+		z-index: 9999; /* Asegurar que esté por encima de todo */
+	}
+
+	.animate-logo {
+		display: block; /* mostrar cuando tiene la clase para animar */
+		animation: shrinkLogo 4s ease-in-out forwards;
+	}
+
+  /* Mejoras de transición para interacciones */
+  .transition-all {
+    transition: all 0.3s ease;
+  }
+  
+  /* Mejora para modo de alto contraste */
+  @media (prefers-contrast: high) {
+    .border-yellow-600 {
+      border-color: #000;
+    }
+    .text-fuchsia-700 {
+      color: #000;
+    }
+  }
+  
+  /* Mejora para reducir movimiento */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-logo {
+      animation: none;
+    }
+    .transition-all {
+      transition: none;
+    }
+  }
+  
+  /* Focus styles mejorados */
+  .focus\:outline-2:focus {
+    outline: 2px solid;
+  }
+
+  /* FIX para video de fondo */
+  .video-container {
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    overflow: hidden;
+  }
+
+  .video-container video {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-}
+    object-fit: cover;
+  }
 
-.animate-logo {
-	display: block; /* mostrar cuando tiene la clase para animar */
-    animation: shrinkLogo 4s ease-in-out forwards;
-}
+  /* Asegurar que el contenido esté por encima */
+  .content-wrapper {
+    position: relative;
+    z-index: 1;
+  }
     </style>
 </head>
-<body>
-    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover -z-10">
+<body class="min-h-screen">
+    <!-- Video de fondo FIXED -->
+    <div class="video-container">
+      <video 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        aria-hidden="true"
+        title="Video decorativo de fondo">
         <source src="/video/videoFondo.mp4" type="video/mp4">
-        
-    </video>
+        <source src="/video/videoFondo.webm" type="video/webm">
+        Tu navegador no soporta el elemento de video.
+      </video>
+    </div>
     
     <div id="logo-container" class="logo-container bg-white"></div>
-	
-	<!---
-    <script>
-        window.onload = function() {
-            document.getElementById("logo-container").classList.add("animate-logo");
-
-            setTimeout(() => {
-                document.getElementById("logo-container").style.display = "none";
-            }, 2500);
-        };
-    </script> -->
 	
 	<script>
     window.onload = function () {
@@ -115,66 +175,144 @@
     };
 	</script>
 
-	
-
-    <!--
-  This example requires updating your template:
-
-  ```
-  <html class="h-full bg-white">
-  <body class="h-full">
-  ```
--->
-<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-14">
+<div class="content-wrapper flex min-h-screen flex-col justify-center px-6 py-12 lg:px-14">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm ">
-      <img class="mx-auto h-40 md:h-60 lg:h-80" src="/img/LogoIncioSesion.png" alt="Your Company">
-      <h2 class="text-2xl font-bold mb-4 text-center" style="font-family: 'Bebas Neue', sans-serif;">Inicia sesión en tu cuenta</h2>
-
+      <img class="mx-auto h-40 md:h-60 lg:h-80" src="/img/LogoIncioSesion.png" alt="Logo de la empresa - Inicio de sesión">
+      <h2 class="text-2xl font-bold mb-4 text-center font-bebas">Inicia sesión en tu cuenta</h2>
     </div>
   
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" id="loginForm" method="POST" action="/login">
+    <div class="mt-6 sm:mx-auto sm:w-full sm:max-w-sm"> <!-- Reducido mt-10 a mt-6 -->
+      <form class="space-y-4" id="loginForm" method="POST" action="/login"> <!-- Reducido space-y-6 a space-y-4 -->
         <div>
-          <label for="email" class="block text-sm/6 font-medium text-gray-900">Correo</label>
-          <div class="mt-2">
-            <input type="email" name="email" id="email" autocomplete="email" required class="border-2 border-yellow-600 block w-full
-             rounded-md bg-white px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 
-             outline-black placeholder:text-black focus:outline-2 focus:-outline-offset-2 
-             focus:outline-fuchsia-600 sm:text-sm/6">
+          <label for="email" class="block text-sm/6 font-medium text-gray-900">
+            Correo electrónico
+          </label>
+          <div class="mt-1"> <!-- Reducido mt-2 a mt-1 -->
+            <input 
+              type="email" 
+              name="email" 
+              id="email" 
+              autocomplete="email" 
+              required 
+              aria-required="true"
+              aria-describedby="email-help"
+              class="border-2 border-yellow-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-black placeholder:text-black focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 transition-all duration-200">
           </div>
+          <div id="email-help" class="sr-only">Ingresa tu correo electrónico registrado</div>
         </div>
   
         <div>
           <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm/6 font-medium text-gray-900">Contraseña</label>
-            <div class="text-sm">
-                <a href="/forgot-password" class="font-semibold text-fuchsia-700 hover:text-yellow-600">
-                    ¿Olvidó la contraseña?
-                  </a>
-                  
-            </div>
+            <label for="password" class="block text-sm/6 font-medium text-gray-900">
+              Contraseña
+            </label>
           </div>
-          <div class="mt-2">
-            <input type="password" name="pass" id="password" autocomplete="current-password" 
-            required class="border-2 border-yellow-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1
-             -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6">
+          <div class="mt-1"> <!-- Reducido mt-2 a mt-1 -->
+            <input 
+              type="password" 
+              name="pass" 
+              id="password" 
+              autocomplete="current-password" 
+              required
+              aria-required="true"
+              aria-describedby="password-help"
+              class="border-2 border-yellow-600 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 transition-all duration-200">
           </div>
+          <div id="password-help" class="sr-only">Ingresa tu contraseña</div>
+        </div>
+
+        <!-- Enlace de olvidó contraseña - ESPACIO REDUCIDO -->
+        <div class="pt-1"> <!-- Agregado pt-1 para pequeño espacio -->
+          <a href="/forgot-password" class="text-sm font-semibold text-fuchsia-700 hover:text-yellow-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 rounded px-1 transition-colors duration-200">
+            ¿Olvidó la contraseña?
+          </a>
         </div>
   
-        <div>
-          <button type="submit" class="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm/6 
-      font-semibold text-white shadow-xs hover:bg-fuchsia-800 focus-visible:outline-2
-      focus-visible:outline-offset-2 focus-visible:outline-black">Ingresar</button>
+        <div class="pt-2"> <!-- Agregado pt-2 para separación del botón -->
+          <button 
+            type="submit" 
+            id="submit-btn"
+            aria-label="Iniciar sesión en la cuenta"
+            class="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-fuchsia-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            <span id="button-text">Ingresar</span>
+            <span id="loading-spinner" class="hidden ml-2">⌛</span>
+          </button>
         </div>
       </form>
   
-      <p class="mt-10 text-center text-sm/6 text-gray-500">
+      <p class="mt-8 text-center text-sm/6 text-gray-500"> <!-- Reducido mt-10 a mt-8 -->
         ¿No tienes una cuenta?
-        <a href="/registro" class="font-semibold text-fuchsia-700 hover:text-yellow-600">Registrate</a>
+        <a href="/registro" class="font-semibold text-fuchsia-700 hover:text-yellow-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 rounded px-1 transition-colors duration-200">
+          Regístrate
+        </a>
       </p>
     </div>
   </div>
+
+<!-- Script de mejoras de usabilidad -->
+<script>
+// Mejoras de usabilidad para el formulario
+document.addEventListener('DOMContentLoaded', function() {
+  const loginForm = document.getElementById('loginForm');
+  const submitBtn = document.getElementById('submit-btn');
+  const buttonText = document.getElementById('button-text');
+  const loadingSpinner = document.getElementById('loading-spinner');
   
+  // Feedback visual al enviar el formulario
+  if (loginForm && submitBtn) {
+    loginForm.addEventListener('submit', function() {
+      // Deshabilitar botón durante el envío
+      submitBtn.disabled = true;
+      buttonText.textContent = 'Procesando...';
+      loadingSpinner.classList.remove('hidden');
+    });
+  }
+  
+  // Mejorar focus para usuarios de teclado
+  const focusableElements = document.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  
+  focusableElements.forEach(element => {
+    element.addEventListener('focus', function() {
+      this.classList.add('ring-2', 'ring-fuchsia-500', 'ring-offset-2');
+    });
+    
+    element.addEventListener('blur', function() {
+      this.classList.remove('ring-2', 'ring-fuchsia-500', 'ring-offset-2');
+    });
+  });
+  
+  // Validación en tiempo real mejorada
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  
+  if (emailInput) {
+    emailInput.addEventListener('blur', function() {
+      if (this.value && !this.validity.valid) {
+        this.classList.add('border-red-500');
+        this.setAttribute('aria-invalid', 'true');
+      } else {
+        this.classList.remove('border-red-500');
+        this.setAttribute('aria-invalid', 'false');
+      }
+    });
+  }
+
+  if (passwordInput) {
+    passwordInput.addEventListener('blur', function() {
+      if (this.value && this.value.length < 1) {
+        this.classList.add('border-red-500');
+        this.setAttribute('aria-invalid', 'true');
+      } else {
+        this.classList.remove('border-red-500');
+        this.setAttribute('aria-invalid', 'false');
+      }
+    });
+  }
+});
+</script>
+
 <% if (typeof alert !== 'undefined') { %>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
